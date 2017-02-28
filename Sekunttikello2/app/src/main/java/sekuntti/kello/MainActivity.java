@@ -37,16 +37,13 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View view) {
 
-                Intent i = getBaseContext().getPackageManager()
-                        .getLaunchIntentForPackage( getBaseContext().getPackageName() );
-                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(i);
-
                 CountDownTimerClass ct = new CountDownTimerClass(0 , 1000);
-                ct.stopeverything();
+                countdowntimer.cancel();
+                ct.stopEverything();
+                button.setEnabled(true);
+
             }
         });
-
 
 
         button.setOnClickListener(new View.OnClickListener() {
@@ -60,17 +57,19 @@ public class MainActivity extends Activity {
 
                 } else {
                 String text = edittext.getText().toString();
+
                 final int seconds = Integer.valueOf(text);
 
                 countdowntimer = new CountDownTimerClass(seconds * 1000, 1000);
 
                 countdowntimer.start();
-            }}
+            } }
         });
     }
 
 
     public class CountDownTimerClass extends CountDownTimer {
+        int progress;
 
         final MediaPlayer mp = MediaPlayer.create(getApplicationContext(), R.raw.alarm);
 
@@ -83,7 +82,7 @@ public class MainActivity extends Activity {
         @Override
         public void onTick(long millisUntilFinished) {
 
-            int progress = (int) (millisUntilFinished/1000);
+            progress = (int) (millisUntilFinished/1000);
             button.setEnabled(false);
             textview.setText(Integer.toString(progress));
 
@@ -104,8 +103,8 @@ public class MainActivity extends Activity {
             }, 2000);
             }
 
-            final public void stopeverything(){
-
+            final public void stopEverything(){
+                progress = 0;
                 mp.stop();
                 textview.setText("");
             }
